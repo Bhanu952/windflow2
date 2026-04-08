@@ -1,0 +1,1625 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Windflow AI - Do More. Stress Less.</title>
+  <meta name="description"
+    content="We turn slow, manual, fragmented workflows into intelligent systems that think, adapt, and run - so your team can focus on what matters." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@700;800&display=swap"
+    rel="stylesheet" />
+  <style>
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --navy: #0a2316;
+      --teal: #1a9c7b;
+      --cream: #f4f8f5;
+      --white: #ffffff;
+      --agent-dark: #07170e;
+    }
+
+    html,
+    body {
+      width: 100%;
+      min-height: 100%;
+      font-family: 'Inter', sans-serif;
+      background: var(--cream);
+      color: var(--navy);
+      overflow-x: hidden;
+      scroll-behavior: smooth;
+      scroll-snap-type: y proximity;
+    }
+
+    section {
+      position: relative;
+      width: 100%;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 100px 48px;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.8s cubic-bezier(0.2, 0.8, 0.2, 1), transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+
+    .reveal.active {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ─── HERO ─── */
+    .hero {
+      position: relative;
+      width: 100%;
+      height: 100vh;
+      min-height: 680px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .hero-bg {
+      position: fixed;
+      inset: 0;
+      background: url('bg.png') center center / cover no-repeat;
+      z-index: 0;
+    }
+
+    .hero-overlay {
+      position: absolute;
+      inset: 0;
+      background: url('Rectangle%204.png') center bottom / cover no-repeat;
+      z-index: 1;
+    }
+
+    /* ─── CANVAS ─── */
+    #wind-canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: block;
+      z-index: 5;
+      pointer-events: none;
+    }
+
+    /* ─── NAV ─── */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px 48px;
+      background: transparent;
+      border-bottom: 1px solid transparent;
+      transition: all 0.3s ease;
+    }
+
+    nav.scrolled {
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      background: rgba(244, 248, 245, 0.15);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+      box-shadow: 0 4px 30px rgba(10, 35, 22, 0.05);
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+    }
+
+    .logo-icon {
+      width: 28px;
+      height: 28px;
+    }
+
+    .logo-text {
+      font-family: 'Inter', sans-serif;
+      font-weight: 600;
+      font-size: 15px;
+      color: var(--navy);
+    }
+
+    .logo-text span {
+      color: var(--teal);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 36px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--navy);
+      text-decoration: none;
+      opacity: 0.75;
+      transition: opacity 0.2s;
+    }
+
+    .nav-links a:hover {
+      opacity: 1;
+    }
+
+    .nav-cta {
+      background: var(--navy);
+      color: var(--white) !important;
+      opacity: 1 !important;
+      padding: 10px 22px;
+      border-radius: 50px;
+      font-size: 13px !important;
+      font-weight: 600 !important;
+    }
+
+    /* ─── HERO CONTENT ─── */
+    .hero-content {
+      position: relative;
+      z-index: 10;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 0 24px 80px;
+    }
+
+    .hero-eyebrow {
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--teal);
+      margin-bottom: 18px;
+      opacity: 0;
+      animation: fadeUp 0.8s ease forwards 0.3s;
+    }
+
+    .hero-headline {
+      font-family: 'Space Grotesk', sans-serif;
+      color: var(--navy);
+      line-height: 1.05;
+      margin-bottom: 16px;
+      text-shadow: 0 2px 20px rgba(255, 255, 255, 0.5);
+      opacity: 0;
+      animation: fadeUp 0.9s ease forwards 0.5s;
+    }
+
+    .hero-headline .line1 {
+      display: block;
+      font-size: clamp(26px, 4vw, 52px);
+      font-weight: 700;
+      letter-spacing: 0.04em;
+    }
+
+    .hero-headline .line2 {
+      display: block;
+      font-size: clamp(38px, 6.5vw, 88px);
+      font-weight: 800;
+      letter-spacing: 0.01em;
+    }
+
+    .hero-sub {
+      max-width: 480px;
+      font-size: clamp(13px, 1.4vw, 16px);
+      line-height: 1.7;
+      color: var(--navy);
+      text-shadow: 0 1px 10px rgba(255, 255, 255, 0.8);
+      margin-bottom: 36px;
+      opacity: 0;
+      animation: fadeUp 0.9s ease forwards 0.75s;
+    }
+
+    .hero-cta-row {
+      display: flex;
+      gap: 14px;
+      align-items: center;
+      opacity: 0;
+      animation: fadeUp 0.9s ease forwards 1s;
+    }
+
+    .btn-primary {
+      background: var(--navy);
+      color: var(--white);
+      padding: 14px 34px;
+      border-radius: 50px;
+      font-size: 15px;
+      font-weight: 600;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 4px 24px rgba(10, 35, 22, 0.35);
+      transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-4px) scale(1.03);
+      box-shadow: 0 12px 32px rgba(10, 35, 22, 0.45);
+    }
+
+    .btn-ghost {
+      color: var(--navy);
+      font-size: 14px;
+      font-weight: 500;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      opacity: 0.7;
+      transition: opacity 0.2s;
+    }
+
+    .btn-ghost:hover {
+      opacity: 1;
+    }
+
+    .btn-ghost svg {
+      transition: transform 0.2s;
+    }
+
+    .btn-ghost:hover svg {
+      transform: translateX(3px);
+    }
+
+    /* ─── FRICTION SECTION ─── */
+    .section-friction {
+      position: relative;
+      z-index: 10;
+      scroll-snap-align: start;
+    }
+
+    .section-friction::before {
+      content: '';
+      position: absolute;
+      top: -100px;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: -1;
+      background: rgba(244, 248, 245, 0.25);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 200px, black 100%);
+      mask-image: linear-gradient(to bottom, transparent 0%, black 200px, black 100%);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+      pointer-events: none;
+    }
+
+    .friction-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: center;
+    }
+
+    .friction-label {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--teal);
+      margin-bottom: 24px;
+      display: block;
+    }
+
+    .friction-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: clamp(32px, 5vw, 64px);
+      line-height: 1.1;
+      margin-bottom: 32px;
+    }
+
+    .friction-text {
+      font-size: clamp(16px, 1.2vw, 20px);
+      line-height: 1.6;
+      opacity: 0.8;
+      max-width: 540px;
+    }
+
+    .stat-box {
+      background: rgba(255, 255, 255, 0.35);
+      backdrop-filter: blur(40px) saturate(150%);
+      -webkit-backdrop-filter: blur(40px) saturate(150%);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      padding: 50px 40px;
+      border-radius: 32px;
+      position: relative;
+      box-shadow: 0 20px 40px rgba(10, 35, 22, 0.06),
+        inset 0 2px 0 rgba(255, 255, 255, 0.6);
+      transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .stat-box:hover {
+      transform: translateY(-8px) scale(1.02);
+      box-shadow: 0 30px 60px rgba(10, 35, 22, 0.1),
+        inset 0 2px 0 rgba(255, 255, 255, 1);
+    }
+
+    .stat-number {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 80px;
+      font-weight: 800;
+      color: var(--teal);
+      line-height: 1;
+      margin-bottom: 8px;
+    }
+
+    .stat-desc {
+      font-size: 16px;
+      font-weight: 500;
+      opacity: 0.7;
+    }
+
+    /* ─── SHIFT SECTION (FLOWING WORKFLOWS) ─── */
+    .section-shift {
+      position: relative;
+      background: radial-gradient(circle at 65% 50%, rgba(216, 239, 235, 0.7) 0%, rgba(182, 223, 217, 0.6) 40%, rgba(153, 203, 199, 0.4) 100%);
+      backdrop-filter: blur(60px);
+      padding: 160px 0;
+      color: var(--navy);
+      display: flex;
+      align-items: center;
+      z-index: 9;
+      scroll-snap-align: start;
+    }
+
+    .workflow-canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .workflow-line {
+      fill: none;
+      stroke: rgba(255, 255, 255, 0.4);
+      stroke-width: 1.5;
+      stroke-linecap: round;
+      stroke-dasharray: 3000;
+      stroke-dashoffset: 3000;
+      animation: flowLine 8s linear infinite;
+    }
+
+    .workflow-line:nth-child(3) {
+      stroke: rgba(255, 255, 255, 0.8);
+      stroke-width: 2.5;
+      animation-duration: 6s;
+    }
+
+    .workflow-line:nth-child(4) {
+      stroke: rgba(255, 255, 255, 0.3);
+      stroke-width: 1;
+      animation-duration: 9s;
+      animation-delay: -2s;
+    }
+
+    .workflow-line:nth-child(5) {
+      stroke: rgba(255, 255, 255, 0.5);
+      stroke-width: 3;
+      animation-duration: 7s;
+      animation-delay: -4s;
+    }
+
+    .workflow-line:nth-child(6) {
+      stroke: rgba(255, 255, 255, 0.2);
+      stroke-width: 1;
+      animation-duration: 11s;
+      animation-delay: -6s;
+    }
+
+    .workflow-line:nth-child(7) {
+      stroke: rgba(255, 255, 255, 0.6);
+      stroke-width: 1.5;
+      animation-duration: 8.5s;
+      animation-delay: -1s;
+    }
+
+    @keyframes flowLine {
+      0% {
+        stroke-dashoffset: 3000;
+        opacity: 0;
+      }
+
+      10% {
+        opacity: 1;
+      }
+
+      90% {
+        opacity: 1;
+      }
+
+      100% {
+        stroke-dashoffset: 0;
+        opacity: 0;
+      }
+    }
+
+    .shift-content-left {
+      position: relative;
+      z-index: 1;
+      max-width: 580px;
+      text-align: left;
+    }
+
+    .shift-header-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      color: var(--navy);
+      opacity: 0.5;
+      text-transform: uppercase;
+      margin-bottom: 24px;
+      display: block;
+    }
+
+    .shift-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: clamp(38px, 4.5vw, 52px);
+      font-weight: 700;
+      line-height: 1.1;
+      color: var(--navy);
+      margin-bottom: 24px;
+      letter-spacing: -0.02em;
+    }
+
+    .shift-body {
+      font-size: clamp(16px, 1.2vw, 18px);
+      line-height: 1.6;
+      color: var(--navy);
+      opacity: 0.75;
+      margin-bottom: 40px;
+    }
+
+    .btn-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 16px 36px;
+      background: #4ab3bc;
+      color: var(--white);
+      text-decoration: none;
+      font-weight: 600;
+      border-radius: 100px;
+      font-size: 15px;
+      box-shadow: 0 4px 15px rgba(74, 179, 188, 0.3);
+      transition: all 0.3s ease;
+    }
+
+    .btn-pill:hover {
+      background: #3a9ea6;
+      transform: scale(1.03);
+      box-shadow: 0 8px 25px rgba(74, 179, 188, 0.4);
+    }
+
+    /* ─── COMPARISON SECTION (EDITORIAL) ─── */
+    .section-comparison {
+      background: rgba(4, 15, 10, 0.4);
+      backdrop-filter: blur(40px);
+      -webkit-backdrop-filter: blur(40px);
+      position: relative;
+      z-index: 10;
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+      padding: 160px 0;
+    }
+
+    .comp-wrapper {
+      position: relative;
+      max-width: 900px;
+      margin: 80px auto 0;
+      min-height: 440px;
+    }
+
+    .comp-card {
+      position: absolute;
+      width: 480px;
+      padding: 50px 40px;
+      border-radius: 32px;
+      transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.6s ease, background 0.4s ease;
+    }
+
+    .comp-card.fragile {
+      left: 0;
+      top: 0;
+      background: rgba(255, 255, 255, 0.03);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      color: rgba(255, 255, 255, 0.5);
+      z-index: 1;
+      transform: scale(0.95);
+      transform-origin: center right;
+    }
+
+    .comp-card.premium {
+      right: 0;
+      top: 50px;
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(40px) saturate(150%);
+      -webkit-backdrop-filter: blur(40px) saturate(150%);
+      border: 1px solid rgba(255, 255, 255, 0.9);
+      color: var(--navy);
+      z-index: 2;
+      box-shadow: -20px 20px 60px rgba(0, 0, 0, 0.15), inset 0 2px 0 rgba(255, 255, 255, 1);
+    }
+
+    .comp-card.fragile:hover {
+      transform: scale(0.97) translateX(-10px);
+      background: rgba(255, 255, 255, 0.06);
+    }
+
+    .comp-card.premium:hover {
+      transform: translateY(-8px) scale(1.02);
+      box-shadow: -30px 40px 80px rgba(0, 0, 0, 0.25), inset 0 2px 0 rgba(255, 255, 255, 1);
+    }
+
+    .comp-header {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 28px;
+      margin-bottom: 40px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      letter-spacing: -0.02em;
+    }
+
+    .comp-item {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 24px;
+      font-size: 16px;
+      font-weight: 500;
+    }
+
+    .comp-card.fragile .comp-header {
+      color: rgba(255, 255, 255, 0.8);
+    }
+
+    .comp-card.fragile .comp-item {
+      opacity: 0.7;
+    }
+
+    .comp-card.premium .comp-item {
+      opacity: 0.85;
+    }
+
+    .comp-item svg {
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    @media (max-width: 900px) {
+      .comp-wrapper {
+        display: flex;
+        flex-direction: column;
+        gap: 30px;
+        min-height: auto;
+      }
+
+      .comp-card {
+        position: relative;
+        width: 100%;
+        top: auto !important;
+        left: auto !important;
+        right: auto !important;
+        transform: none !important;
+      }
+    }
+
+
+
+    /* ─── MOONSHOT SECTION ─── */
+    .section-moonshot {
+      background: rgba(10, 15, 26, 0.95);
+      backdrop-filter: blur(12px);
+      color: var(--white);
+      text-align: center;
+    }
+
+    .moonshot-form {
+      max-width: 600px;
+      margin: 60px auto 0;
+      text-align: left;
+    }
+
+    .form-group {
+      margin-bottom: 24px;
+    }
+
+    .form-label {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 8px;
+      opacity: 0.6;
+    }
+
+    .form-input {
+      width: 100%;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      padding: 16px;
+      color: white;
+      font-family: inherit;
+      font-size: 16px;
+      transition: border-color 0.2s;
+    }
+
+    .form-input:focus {
+      outline: none;
+      border-color: var(--teal);
+    }
+
+    /* ─── FOOTER ─── */
+    .site-footer {
+      position: relative;
+      background: rgba(5, 8, 15, 0.95);
+      backdrop-filter: blur(20px);
+      z-index: 10;
+      color: rgba(255, 255, 255, 0.7);
+      padding: 80px 48px 40px;
+      font-size: 14px;
+    }
+
+    .footer-content {
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 40px;
+      padding-bottom: 40px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .footer-brand .logo-text {
+      color: var(--white);
+      font-size: 20px;
+    }
+
+    .footer-brand p {
+      margin-top: 16px;
+      max-width: 300px;
+      line-height: 1.6;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 80px;
+    }
+
+    .link-col h4 {
+      color: var(--white);
+      margin-bottom: 20px;
+      font-size: 16px;
+      font-weight: 600;
+    }
+
+    .link-col a {
+      display: block;
+      color: rgba(255, 255, 255, 0.6);
+      text-decoration: none;
+      margin-bottom: 12px;
+      transition: color 0.2s;
+    }
+
+    .link-col a:hover {
+      color: var(--teal);
+    }
+
+    .footer-bottom {
+      display: flex;
+      justify-content: space-between;
+      padding-top: 30px;
+      opacity: 0.5;
+    }
+
+    /* ─── PLAYFUL SVGS ─── */
+    .squiggle {
+      position: absolute;
+      pointer-events: none;
+      z-index: -1;
+      overflow: visible;
+    }
+
+    .squiggle path {
+      stroke-dasharray: 1000;
+      stroke-dashoffset: 1000;
+      transition: stroke-dashoffset 1.5s cubic-bezier(0.34, 1.56, 0.64, 1) 0.3s;
+    }
+
+    .reveal.active .squiggle path,
+    .reveal.active.squiggle path,
+    .reveal.active~.squiggle path {
+      stroke-dashoffset: 0;
+    }
+
+    /* ─── SCROLL HINT ─── */
+    .scroll-hint {
+      position: absolute;
+      bottom: 28px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 10;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      opacity: 0;
+      animation: fadeIn 1s ease forwards 1.6s;
+    }
+
+    .scroll-hint span {
+      font-size: 10px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--navy);
+      opacity: 0.5;
+    }
+
+    .scroll-dot {
+      width: 1px;
+      height: 36px;
+      background: linear-gradient(to bottom, var(--navy), transparent);
+      opacity: 0.35;
+      animation: scrollPulse 1.8s ease-in-out infinite;
+    }
+
+    /* ─── NEW COMPONENT: EDITORIAL & STICKY UX ─── */
+    .section-editorial {
+      padding: 180px 0;
+      background: rgba(255, 255, 255, 0.6);
+      backdrop-filter: blur(80px) saturate(120%);
+      -webkit-backdrop-filter: blur(80px) saturate(120%);
+      border-top: 1px solid rgba(255, 255, 255, 0.5);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .editorial-statement {
+      font-size: clamp(36px, 6vw, 76px);
+      line-height: 1.1;
+      font-weight: 800;
+      color: var(--navy);
+      max-width: 900px;
+      margin: 0 auto 60px;
+      letter-spacing: -0.03em;
+    }
+
+    .editorial-paragraph {
+      font-size: clamp(18px, 2vw, 24px);
+      line-height: 1.6;
+      color: var(--navy);
+      opacity: 0.85;
+      max-width: 800px;
+      margin: 0 auto 80px;
+    }
+
+    .sticky-wrapper {
+      display: flex;
+      align-items: flex-start;
+      gap: 60px;
+      position: relative;
+    }
+
+    .sticky-left {
+      position: sticky;
+      top: 140px;
+      flex: 0 0 35%;
+    }
+
+    .scrolling-right {
+      flex: 1;
+      padding-bottom: 200px;
+    }
+
+    .scroll-item {
+      opacity: 0.4;
+      transform: translateY(40px) scale(0.95);
+      transition: all 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+      margin-bottom: 80px;
+      padding: 40px;
+      border-radius: 32px;
+      background: rgba(255, 255, 255, 0.2);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.02);
+    }
+
+    .scroll-item.active {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+      background: rgba(255, 255, 255, 0.85);
+      border: 1px solid rgba(255, 255, 255, 1);
+      box-shadow: 0 30px 60px rgba(0, 0, 0, 0.08), inset 0 2px 0 rgba(255, 255, 255, 1);
+    }
+
+    .scroll-item-title {
+      font-size: clamp(24px, 3vw, 32px);
+      font-weight: 700;
+      margin-bottom: 16px;
+      color: var(--teal);
+    }
+
+    .scroll-item-text {
+      font-size: clamp(16px, 1.5vw, 18px);
+      line-height: 1.6;
+      opacity: 0.8;
+      color: var(--navy);
+    }
+
+    .parallax-doodle {
+      position: absolute;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* Agent Box Dark overrides */
+    .section-agent {
+      background: transparent;
+      backdrop-filter: none;
+      -webkit-backdrop-filter: none;
+      border-top: none;
+      color: var(--navy);
+      z-index: 9;
+    }
+
+    .section-agent::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: -1;
+      background: rgba(244, 248, 245, 0.25);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 150px);
+      mask-image: linear-gradient(to bottom, transparent 0%, black 150px);
+      pointer-events: none;
+    }
+
+    .section-agent .editorial-statement {
+      color: var(--navy);
+    }
+
+    /* ─── KEYFRAMES ─── */
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(22px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+
+      to {
+        opacity: 1;
+      }
+    }
+
+    @keyframes scrollPulse {
+
+      0%,
+      100% {
+        transform: scaleY(1);
+        opacity: 0.35;
+      }
+
+      50% {
+        transform: scaleY(1.3);
+        opacity: 0.6;
+      }
+    }
+
+    @keyframes pulse {
+      0% {
+        transform: scale(1);
+        opacity: 0.1;
+      }
+
+      100% {
+        transform: scale(1.5);
+        opacity: 0.3;
+      }
+    }
+
+    @media (max-width: 900px) {
+      .sticky-wrapper {
+        flex-direction: column;
+        gap: 40px;
+      }
+
+      .sticky-left {
+        position: relative;
+        top: 0;
+      }
+
+      .scrolling-right {
+        padding-bottom: 60px;
+      }
+
+      .scroll-item {
+        margin-bottom: 80px;
+      }
+    }
+
+    @media (max-width: 640px) {
+      nav {
+        padding: 20px 24px;
+      }
+
+      .nav-links {
+        display: none;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <section class="hero" id="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-overlay"></div>
+    <canvas id="wind-canvas"></canvas>
+
+    <nav>
+      <a class="logo" href="#">
+        <svg class="logo-icon" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M4 8 Q10 6 14 14 Q18 22 24 20" stroke="#4ab3bc" stroke-width="2.8" stroke-linecap="round"
+            fill="none" />
+          <path d="M4 14 Q10 12 14 18 Q18 24 24 22" stroke="#4ab3bc" stroke-width="1.8" stroke-linecap="round"
+            fill="none" opacity="0.55" />
+        </svg>
+        <span class="logo-text">windflow<span>.ai</span></span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="#">Solutions</a></li>
+        <li><a href="#">How it Works</a></li>
+        <li><a href="#">Pricing</a></li>
+        <li><a href="#" class="nav-cta">Get Started</a></li>
+      </ul>
+    </nav>
+
+    <div class="hero-content">
+      <p class="hero-eyebrow">AI-Powered Workflow Automation</p>
+      <h1 class="hero-headline">
+        <span class="line1">DO MORE. STRESS LESS.</span>
+        <span class="line2">LET AI HANDLE IT</span>
+      </h1>
+      <p class="hero-sub">
+        We turn slow, manual, fragmented workflows into<br />
+        intelligent systems that think, adapt, and run -<br />
+        so your team can focus on what matters.
+      </p>
+      <div class="hero-cta-row">
+        <a href="#friction" class="btn-primary" id="cta-start">The Problem</a>
+        <a href="#shift" class="btn-ghost" id="cta-learn">
+          The Solution
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <path d="M3 8h10M9 4l4 4-4 4" stroke="#1a2b3c" stroke-width="1.8" stroke-linecap="round"
+              stroke-linejoin="round" />
+          </svg>
+        </a>
+      </div>
+    </div>
+
+    <div class="scroll-hint">
+      <span>Scroll</span>
+      <div class="scroll-dot"></div>
+    </div>
+  </section>
+
+  <!-- ═══ SECTION 2: THE PROBLEM ═══ -->
+  <section class="section-friction" id="friction">
+    <div class="container">
+      <div class="friction-grid">
+        <div class="reveal">
+          <span class="friction-label">IS YOUR WORKLOAD SLOWING YOU DOWN?</span>
+          <h2 class="friction-title" style="position: relative; display: inline-block;">
+            Trapped in processes.
+            <svg class="squiggle" viewBox="0 0 200 20" style="bottom: -15px; left: 0; width: 100%; height: 20px;">
+              <path d="M 5 15 Q 50 -5, 100 10 T 195 5" fill="none" stroke="var(--teal)" stroke-width="4"
+                stroke-linecap="round" />
+            </svg>
+          </h2>
+          <p class="friction-text">
+            Every organisation has brilliant people trapped in slow, repetitive, fragmented processes. Systems don't
+            talk. People bridge the gap with spreadsheets and copy-paste.
+          </p>
+          <p class="friction-text" style="margin-top: 20px;">
+            The work gets done - but at enormous cost: time. Decisions that should take minutes become 3-day
+            turnarounds.
+          </p>
+        </div>
+        <div class="stat-box reveal" style="transition-delay: 0.2s;">
+          <div class="stat-number">80%</div>
+          <p class="stat-desc">of time spent on manual, fragmented workflows rather than high-impact strategy.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ SECTION 3: THE SHIFT (FLOWING WORKFLOWS) ═══ -->
+  <section class="section-shift" id="shift">
+    <!-- Animated Flowing Workflows -->
+    <svg class="workflow-canvas" preserveAspectRatio="none" viewBox="0 0 1000 400">
+      <defs>
+        <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+          <feGaussianBlur stdDeviation="6" result="blur" />
+          <feMerge>
+            <feMergeNode in="blur" />
+            <feMergeNode in="SourceGraphic" />
+          </feMerge>
+        </filter>
+      </defs>
+
+      <!-- Central flare -->
+      <ellipse cx="650" cy="200" rx="150" ry="100" fill="rgba(255,255,255,0.4)" filter="blur(60px)" />
+
+      <!-- Flowing Bezier Lines -->
+      <path class="workflow-line" d="M -100 250 Q 300 350, 650 200 T 1100 50" filter="url(#glow)" />
+      <path class="workflow-line" d="M -100 300 Q 400 200, 700 250 T 1100 0" />
+      <path class="workflow-line" d="M -100 150 Q 200 100, 500 200 T 1100 250" filter="url(#glow)" />
+      <path class="workflow-line" d="M -100 100 Q 350 400, 650 100 T 1100 300" />
+      <path class="workflow-line" d="M -100 200 Q 250 50, 550 250 T 1100 150" filter="url(#glow)" />
+    </svg>
+
+    <div class="container relative">
+      <div class="shift-content-left reveal">
+        <span class="shift-header-label">FROM WORKFLOWS TO INTELLIGENT SYSTEMS</span>
+        <h2 class="shift-title">Let your workflows<br />think for themselves.</h2>
+        <p class="shift-body">
+          Turn slow, manual, fragmented workflows into intelligent systems that think, adapt, and run - so your team can
+          focus on what matters.
+        </p>
+        <a href="#comparison" class="btn-pill">Watch It Think &nbsp;></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ SECTION 4: COMPARISON ═══ -->
+  <section class="section-comparison" id="comparison">
+    <div class="container">
+      <h2 class="editorial-statement reveal" style="text-align: center; color: var(--white);">
+        Same work.<br />Infinitely smarter.
+      </h2>
+      <p class="editorial-paragraph reveal"
+        style="text-align: center; max-width: 600px; margin: 0 auto; color: rgba(255,255,255,0.7);">
+        Watch what happens when intelligence enters your workflow. The before and after are separated by seconds.
+      </p>
+
+      <div class="comp-wrapper">
+        <!-- Fragmented State -->
+        <div class="comp-card fragile reveal">
+          <div class="comp-header">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.8)" stroke-width="2">
+              <circle cx="12" cy="12" r="10" />
+              <path d="m15 9-6 6M9 9l6 6" />
+            </svg>
+            Fragmented
+          </div>
+          <div class="comp-item">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ff4d4d" stroke-width="2">
+              <circle cx="12" cy="12" r="4" fill="#ff4d4d" fill-opacity="0.2" />
+              <path
+                d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41" />
+            </svg>
+            From manual data entry
+          </div>
+          <div class="comp-item">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ff4d4d" stroke-width="2">
+              <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
+              <line x1="9" y1="3" x2="9" y2="21" />
+            </svg>
+            Rigid rule-based triggers
+          </div>
+          <div class="comp-item">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ff4d4d" stroke-width="2">
+              <circle cx="12" cy="12" r="10" />
+              <polyline points="12 6 12 12 16 14" />
+            </svg>
+            Bottlenecked by human review
+          </div>
+        </div>
+
+        <!-- Windflow State -->
+        <div class="comp-card premium reveal" style="transition-delay: 0.2s;">
+          <div class="comp-header">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="var(--teal)" stroke="none">
+              <path d="M12 2L15 8L22 9L17 14L18.5 21L12 17.5L5.5 21L7 14L2 9L9 8L12 2Z" />
+            </svg>
+            Windflow AI
+          </div>
+          <div class="comp-item">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="2.5">
+              <polyline points="20 6 9 17 4 12" />
+            </svg>
+            To automated precision
+          </div>
+          <div class="comp-item">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="2.5">
+              <polyline points="20 6 9 17 4 12" />
+            </svg>
+            Context-aware reasoning
+          </div>
+          <div class="comp-item">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="2.5">
+              <polyline points="20 6 9 17 4 12" />
+            </svg>
+            Scales infinitely, continuously
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ SECTION: VALUE INTELLIGENCE ═══ -->
+  <section class="section-editorial" id="value-intelligence">
+    <!-- Parallax Doodles -->
+    <svg class="parallax-doodle" data-speed="0.25"
+      style="top: 10%; right: 5%; width: 300px; height: 300px; opacity: 0.4;" viewBox="0 0 100 100" fill="none">
+      <path d="M10,90 Q50,0 90,90 T40,50" stroke="var(--teal)" stroke-width="2" stroke-linecap="round" />
+      <circle cx="90" cy="90" r="4" fill="var(--teal)" />
+    </svg>
+    <svg class="parallax-doodle" data-speed="-0.15"
+      style="top: 40%; left: -5%; width: 400px; height: 400px; opacity: 0.2;" viewBox="0 0 100 100" fill="none">
+      <path d="M0,50 C30,10 70,90 100,50" stroke="var(--navy)" stroke-width="1" />
+    </svg>
+
+    <div class="container relative" style="z-index: 1;">
+      <span class="friction-label reveal">VALUE INTELLIGENCE</span>
+
+      <h2 class="editorial-statement reveal">
+        How we Do it?
+      </h2>
+
+      <p class="editorial-paragraph reveal">
+        Every CXO faces the same problem. It's not a shortage of AI ideas - it's a shortage of conviction about which
+        ones deserve real capital.
+        <br /><br />
+        Think of it like a funnel. Dozens of possibilities enter. What comes out are the two or three moonshots that
+        will genuinely move your P&L.
+      </p>
+
+      <div class="sticky-wrapper">
+        <div class="sticky-left reveal">
+          <h3 style="font-size: 28px; font-weight: 700; color: var(--navy); margin-bottom: 24px;">The Process</h3>
+          <p style="font-size: 18px; line-height: 1.6; color: var(--navy); opacity: 0.8;">
+            We don't give you options and walk away. We map your enterprise landscape, filter ruthlessly by business
+            impact, and arrive at a quantified value hypothesis.
+          </p>
+          <svg class="squiggle" viewBox="0 0 200 40"
+            style="margin-top: 30px; width: 120px; height: 40px; display: block;">
+            <path d="M0 20 Q50 0 100 20 T200 20" fill="none" stroke="var(--teal)" stroke-width="3" />
+          </svg>
+        </div>
+        <div class="scrolling-right">
+          <div class="scroll-item sync-scroll">
+            <h4 class="scroll-item-title">1. Map the Landscape</h4>
+            <p class="scroll-item-text">We find where AI can create value, where it can't, and where the gap between
+              ambition and readiness is widest.</p>
+          </div>
+          <div class="scroll-item sync-scroll">
+            <h4 class="scroll-item-title">2. Filter Ruthlessly</h4>
+            <p class="scroll-item-text">Not by what's technically interesting-by what actually moves your numbers.</p>
+          </div>
+          <div class="scroll-item sync-scroll">
+            <h4 class="scroll-item-title">3. The Output</h4>
+            <p class="scroll-item-text">A clear go/no-go decision for each moonshot backed by a quantified P&L impact
+              estimate and our reputation.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ SECTION: AGENT BOX (DARK) ═══ -->
+  <section class="section-editorial section-agent" id="agent-box">
+    <!-- Dark Parallax Doodles -->
+    <svg class="parallax-doodle" data-speed="0.2"
+      style="top: 20%; right: -10%; width: 600px; height: 600px; opacity: 0.05;" viewBox="0 0 100 100" fill="none">
+      <circle cx="50" cy="50" r="40" stroke="var(--teal)" stroke-width="0.5" stroke-dasharray="2 4" />
+      <circle cx="50" cy="50" r="30" stroke="var(--teal)" stroke-width="1" />
+      <path d="M50 20 L50 80 M20 50 L80 50" stroke="var(--teal)" stroke-width="0.5" />
+    </svg>
+
+    <div class="container relative" style="z-index: 1;">
+      <span class="friction-label reveal" style="color: var(--teal); border-color: rgba(26,156,123,0.3);">THE AGENT
+        BOX</span>
+
+      <div class="sticky-wrapper" style="margin-top: 40px;">
+        <div class="sticky-left reveal">
+          <h2 style="font-size: clamp(36px, 5vw, 64px); font-weight: 800; line-height: 1.1; margin-bottom: 24px;">
+            The run system for enterprise AI.
+          </h2>
+          <p style="font-size: 20px; line-height: 1.6; opacity: 0.7;">
+            You've built the AI system. It's live. Now what? Who knows if it's drifting? Who catches anomalies? The
+            Agent Box isn't a dashboard - it's an operating system that runs your agents.
+          </p>
+        </div>
+        <div class="scrolling-right">
+          <div class="scroll-item sync-scroll">
+            <h4 class="scroll-item-title" style="color: var(--teal);">Telemetry</h4>
+            <p class="scroll-item-text">Continuous monitoring of every agent action and decision. Not sampling. Full
+              telemetry.</p>
+          </div>
+          <div class="scroll-item sync-scroll">
+            <h4 class="scroll-item-title" style="color: var(--teal);">Pattern Control</h4>
+            <p class="scroll-item-text">Your AI agents don't just run - they run the way you want them to. When
+              conditions change, operating modes change with them.</p>
+          </div>
+          <div class="scroll-item sync-scroll">
+            <h4 class="scroll-item-title" style="color: var(--teal);">Anomalies</h4>
+            <p class="scroll-item-text">The moment something deviates from expected behaviour, you know. Not after the
+              quarterly review. Now.</p>
+          </div>
+          <div class="scroll-item sync-scroll">
+            <h4 class="scroll-item-title" style="color: var(--teal);">Accountability</h4>
+            <p class="scroll-item-text">Every decision has a visible audit trail. When a regulator asks "why did your AI
+              do this?" - you have the exact answer.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ SECTION: BUILT BY BUILDERS ═══ -->
+  <section class="section-editorial" style="padding-bottom: 80px;">
+    <!-- Parallax Doodles -->
+    <svg class="parallax-doodle" data-speed="0.1"
+      style="bottom: 0%; left: 10%; width: 250px; height: 250px; opacity: 0.5;" viewBox="0 0 100 100" fill="none">
+      <path d="M20 80 Q50 20 80 80" stroke="var(--teal)" stroke-width="2" stroke-linecap="round" />
+      <path d="M25 70 Q50 30 75 70" stroke="var(--navy)" stroke-width="1" stroke-linecap="round" />
+    </svg>
+
+    <div class="container relative" style="text-align: center; z-index: 1;">
+      <h2 class="editorial-statement reveal" style="margin-bottom: 30px;">
+        Built by builders.<br />For people who build.
+      </h2>
+      <p class="editorial-paragraph reveal" style="max-width: 800px; text-align: center;">
+        We're not consultants who advise from a distance. We're builders who get into the work with you. Every
+        organisation has something powerful already inside it. We just help set it in motion.
+        <br /><br />
+        We don't show up empty-handed. We bring capabilities that are ready to go and shape them around how your teams
+        actually work. You get the benefit of years of testing immediately.
+      </p>
+    </div>
+  </section>
+
+  <!-- ═══ SECTION 6: MOONSHOT ═══ -->
+  <section class="section-moonshot" id="contact">
+    <div class="container reveal">
+      <span class="shift-label">SMARTER SYSTEMS. BETTER OUTCOMES.</span>
+      <h2 class="shift-headline" style="font-size: clamp(32px, 5vw, 72px);">The same workspace.<br />But now everything
+        flows.</h2>
+      <p class="shift-sub">We're your automation partners, not just a service provider.</p>
+
+      <div class="moonshot-form">
+        <div class="form-group">
+          <label class="form-label">Work Email</label>
+          <input type="email" class="form-input" placeholder="you@company.com">
+        </div>
+        <div class="form-group" style="margin-bottom: 32px;">
+          <label class="form-label">How can we help?</label>
+          <textarea class="form-input" rows="4"
+            placeholder="Tell us about the bottleneck you want to solve..."></textarea>
+        </div>
+        <button class="btn-primary" style="width: 100%; height: 56px;">Start a Conversation</button>
+      </div>
+    </div>
+  </section>
+
+  <footer class="site-footer">
+    <div class="container footer-content">
+      <div class="footer-brand">
+        <a class="logo" href="#" style="filter: brightness(10) grayscale(1);">
+          <svg class="logo-icon" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M4 8 Q10 6 14 14 Q18 22 24 20" stroke="#4ab3bc" stroke-width="2.8" stroke-linecap="round"
+              fill="none" />
+            <path d="M4 14 Q10 12 14 18 Q18 24 24 22" stroke="#4ab3bc" stroke-width="1.8" stroke-linecap="round"
+              fill="none" opacity="0.55" />
+          </svg>
+          <span class="logo-text">windflow<span>.ai</span></span>
+        </a>
+        <p>We turn fragmented workflows into highly intelligent systems. Let AI handle it.</p>
+      </div>
+      <div class="footer-links">
+        <div class="link-col">
+          <h4>Platform</h4>
+          <a href="#">Solutions</a>
+          <a href="#">Security</a>
+          <a href="#">Process</a>
+        </div>
+        <div class="link-col">
+          <h4>Company</h4>
+          <a href="#">About Us</a>
+          <a href="#">Careers</a>
+          <a href="#">Contact</a>
+        </div>
+      </div>
+    </div>
+    <div class="container footer-bottom">
+      <div>&copy; 2026 Windflow AI, Inc. All rights reserved.</div>
+      <div>Built for CXOs with &hearts;</div>
+    </div>
+  </footer>
+
+  <script>
+    (function () {
+      const canvas = document.getElementById('wind-canvas');
+      const ctx = canvas.getContext('2d');
+      const hero = document.getElementById('hero');
+
+      /* ── Size canvas to match hero ── */
+      function resize() {
+        canvas.width = hero.offsetWidth;
+        canvas.height = hero.offsetHeight;
+      }
+      window.addEventListener('resize', resize);
+
+      /* ── Wind field (sine-wave approximation) ── */
+      function windX(x, y, t) {
+        return (Math.sin(y * 0.008 + t * 0.6) + Math.sin(y * 0.004 + t * 0.35)) * 0.5;
+      }
+      function windY(x, y, t) {
+        return (Math.cos(x * 0.006 + t * 0.4) + Math.cos(x * 0.003 + t * 0.25)) * 0.18;
+      }
+
+      /* ── Palette ── */
+      const COLORS = [
+        'rgba(200,220,190,',
+        'rgba(180,210,170,',
+        'rgba(220,205,170,',
+        'rgba(160,200,180,',
+        'rgba(230,215,185,',
+        'rgba(190,225,200,',
+      ];
+
+      /* ── Draw helpers ── */
+      function leaf(size, color, alpha, angle) {
+        ctx.save();
+        ctx.rotate(angle);
+        ctx.fillStyle = color + alpha.toFixed(2) + ')';
+        ctx.strokeStyle = color + Math.min(alpha + 0.15, 1).toFixed(2) + ')';
+        ctx.lineWidth = 0.6;
+        ctx.beginPath();
+        ctx.moveTo(0, size);
+        ctx.bezierCurveTo(size * .9, size * .5, size * .65, -size * .3, 0, -size);
+        ctx.bezierCurveTo(-size * .65, -size * .3, -size * .9, size * .5, 0, size);
+        ctx.closePath();
+        ctx.fill(); ctx.stroke();
+        ctx.strokeStyle = color + Math.min(alpha + 0.2, 1).toFixed(2) + ')';
+        ctx.lineWidth = 0.8;
+        ctx.beginPath();
+        ctx.moveTo(0, size); ctx.lineTo(0, -size);
+        ctx.stroke();
+        ctx.restore();
+      }
+
+      function petal(size, color, alpha, angle) {
+        ctx.save();
+        ctx.rotate(angle);
+        ctx.fillStyle = color + alpha.toFixed(2) + ')';
+        ctx.beginPath();
+        ctx.moveTo(0, size);
+        ctx.bezierCurveTo(size * .4, size * .2, size * .25, -size * .6, 0, -size);
+        ctx.bezierCurveTo(-size * .25, -size * .6, -size * .4, size * .2, 0, size);
+        ctx.closePath(); ctx.fill();
+        ctx.restore();
+      }
+
+      function seed(size, color, alpha) {
+        ctx.fillStyle = color + alpha.toFixed(2) + ')';
+        ctx.beginPath();
+        ctx.ellipse(0, 0, size * .4, size, 0, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.strokeStyle = color + (alpha * .6).toFixed(2) + ')';
+        ctx.lineWidth = 0.5;
+        ctx.beginPath();
+        ctx.moveTo(0, -size); ctx.lineTo(0, -size * 2.5);
+        ctx.stroke();
+      }
+
+      function streak(len, color, alpha) {
+        const g = ctx.createLinearGradient(-len * .5, 0, len, 0);
+        g.addColorStop(0, color + '0)');
+        g.addColorStop(0.4, color + alpha.toFixed(2) + ')');
+        g.addColorStop(1, color + '0)');
+        ctx.strokeStyle = g;
+        ctx.lineWidth = 0.7;
+        ctx.beginPath();
+        ctx.moveTo(-len * .5, 0); ctx.lineTo(len, 0);
+        ctx.stroke();
+      }
+
+      /* ── Particle ── */
+      const TYPES = ['leaf', 'leaf', 'leaf', 'petal', 'petal', 'seed', 'streak'];
+
+      class Particle {
+        constructor(scatter) {
+          this.type = TYPES[Math.floor(Math.random() * TYPES.length)];
+          this.color = COLORS[Math.floor(Math.random() * COLORS.length)];
+          this.size = this.type === 'streak' ? 30 + Math.random() * 70
+            : this.type === 'seed' ? 3 + Math.random() * 5
+              : 5 + Math.random() * 12;
+          this.reset(scatter);
+        }
+
+        reset(scatter) {
+          const W = canvas.width, H = canvas.height;
+          // scatter = spread randomly across viewport on first init
+          this.x = scatter ? Math.random() * W : -this.size * 3;
+          this.y = scatter
+            ? Math.random() * H * 0.88
+            : H * 0.05 + Math.random() * H * 0.80;
+
+          this.vx = 0.7 + Math.random() * 1.6;
+          this.vy = (Math.random() - 0.5) * 0.4;
+          this.angle = Math.random() * Math.PI * 2;
+          this.spin = (Math.random() - 0.5) * 0.045;
+          this.maxAlpha = 0.28 + Math.random() * 0.42;
+          // scattered particles start mid-life so they're already visible
+          this.life = scatter ? Math.floor(Math.random() * 150) : 0;
+          this.maxLife = 260 + Math.random() * 320;
+          this.phase = Math.random() * Math.PI * 2;
+          this.freq = 0.008 + Math.random() * 0.016;
+          this.wobble = 0.2 + Math.random() * 0.6;
+          this.alpha = scatter ? Math.random() * this.maxAlpha : 0;
+        }
+
+        update(t) {
+          const W = canvas.width, H = canvas.height;
+          this.life++;
+          this.x += this.vx + windX(this.x, this.y, t) * 1.8;
+          this.y += this.vy + windY(this.x, this.y, t) * 0.8
+            + Math.sin(this.life * this.freq + this.phase) * this.wobble;
+          this.angle += this.spin;
+
+          // Fade in on left, fade out on right
+          if (this.x < 100) {
+            this.alpha = (Math.max(0, this.x + 50) / 150) * this.maxAlpha; // slight offset so started particles don't flash
+          } else if (this.x > W - 150) {
+            this.alpha = (Math.max(0, W - this.x) / 150) * this.maxAlpha;
+          } else {
+            this.alpha = this.maxAlpha;
+          }
+
+          // Only reset if it strictly leaves the canvas bounds
+          if (this.x > W + 50 || this.y < -50 || this.y > H + 50) {
+            this.reset(false);
+          }
+        }
+
+        draw() {
+          ctx.save();
+          ctx.translate(this.x, this.y);
+          switch (this.type) {
+            case 'leaf': leaf(this.size, this.color, this.alpha, this.angle); break;
+            case 'petal': petal(this.size, this.color, this.alpha, this.angle); break;
+            case 'seed': seed(this.size, this.color, this.alpha); break;
+            case 'streak':
+              ctx.rotate(this.angle * 0.1);
+              streak(this.size, this.color, this.alpha * 0.6);
+              break;
+          }
+          ctx.restore();
+        }
+      }
+
+      /* ── Init ── */
+      let particles = [];
+      let animT = 0;
+
+      function init() {
+        resize();
+        particles = Array.from({ length: 85 }, (_, i) => new Particle(true));
+        loop();
+      }
+
+      function loop() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        animT += 0.016;
+        for (const p of particles) { p.update(animT); p.draw(); }
+        requestAnimationFrame(loop);
+      }
+
+      // Double rAF guarantees layout is complete before we read dimensions
+      requestAnimationFrame(() => requestAnimationFrame(init));
+    })();
+
+    /* ── Reveal Observer ── */
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('active');
+          revealObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.15 });
+
+    document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+    /* ── Header Scroll State ── */
+    const nav = document.querySelector('nav');
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 0) {
+        nav.classList.add('scrolled');
+      } else {
+        nav.classList.remove('scrolled');
+      }
+    });
+
+    /* ── Interactive Scrolling UX ── */
+    const scrollItems = document.querySelectorAll('.sync-scroll');
+    const parallaxElements = document.querySelectorAll('.parallax-doodle');
+
+    const scrollUXObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('active');
+        } else {
+          entry.target.classList.remove('active');
+        }
+      });
+    }, { rootMargin: "-30% 0px -40% 0px" });
+
+    scrollItems.forEach(el => scrollUXObserver.observe(el));
+
+    let ticking = false;
+    window.addEventListener('scroll', () => {
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          const y = window.scrollY;
+          parallaxElements.forEach(el => {
+            const speed = parseFloat(el.getAttribute('data-speed')) || 0.1;
+            el.style.transform = `translateY(${y * speed}px)`;
+          });
+          ticking = false;
+        });
+        ticking = true;
+      }
+    });
+  </script>
+
+</body>
+
+</html>
